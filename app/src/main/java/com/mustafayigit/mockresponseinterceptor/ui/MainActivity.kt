@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initAdapter()
+        initListener()
         initObserver()
 
         viewModel.getNews()
@@ -54,6 +55,17 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun initListener() {
+        binding.btnChangeSource.setOnClickListener {
+            isGlobalMockingEnabled = !isGlobalMockingEnabled
+            viewModel.getNews()
+        }
+    }
+
+    companion object {
+        var isGlobalMockingEnabled = true
     }
 }
 

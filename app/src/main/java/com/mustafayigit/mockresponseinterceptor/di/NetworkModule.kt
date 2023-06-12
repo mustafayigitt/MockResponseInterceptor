@@ -5,11 +5,13 @@ import com.mustafayigit.mockresponseinterceptor.BuildConfig
 import com.mustafayigit.mockresponseinterceptor.data.INewsRepository
 import com.mustafayigit.mockresponseinterceptor.data.NewsRepository
 import com.mustafayigit.mockresponseinterceptor.data.NewsService
+import com.mustafayigit.mockresponseinterceptor.ui.MainActivity
 import com.mustafayigit.mockresponseinterceptor.util.MockResponseInterceptor
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
@@ -39,7 +41,9 @@ object NetworkModule {
     fun provideMockResponseInterceptor(
         @ApplicationContext context: Context
     ): MockResponseInterceptor {
-        return MockResponseInterceptor.Builder(context).build()
+        return MockResponseInterceptor.Builder(context.assets)
+            .isGlobalMockingEnabled { MainActivity.isGlobalMockingEnabled }
+            .build()
     }
 
     @Provides

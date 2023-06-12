@@ -17,4 +17,17 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/adapter_item_news" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_change_source"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginBottom="20dp"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="Change Source"
+        app:backgroundTint="#2B2B2B"
+        app:cornerRadius="12dp" />
+
 </FrameLayout>

@@ -1,6 +1,6 @@
 package com.mustafayigit.mockresponseinterceptor.util
 
-import android.content.Context
+import android.content.res.AssetManager
 import android.util.Log
 import okhttp3.Request
 import retrofit2.Invocation
@@ -11,13 +11,14 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 
 class MockResponseManager(
-    private val fileNameExtractor: ((String) -> String)? = null
+    private val assetManager: AssetManager,
+    private val fileNameExtractor: ((String) -> String)? = null,
 ) {
-    fun getJsonByUrl(context: Context, request: Request): String {
+    fun getJsonByUrl(request: Request): String {
         val fileName = getFileNameFromRequest(request) + "_" + request.method.lowercase()
         Log.d("MockResponseInterceptor", "Url: ${request.url} --> to $fileName.json")
 
-        return context.assets
+        return assetManager
             .open("$fileName.json")
             .bufferedReader()
             .use { it.readText() }
