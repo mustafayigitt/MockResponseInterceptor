@@ -3,7 +3,6 @@ package com.mustafayigit.mockresponseinterceptor.util
 import android.content.Context
 import android.util.Log
 import com.mustafayigit.mockresponseinterceptor.BuildConfig
-import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.Protocol
@@ -12,30 +11,27 @@ import okhttp3.Response
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Invocation
 import java.io.FileNotFoundException
-import javax.inject.Inject
 
-class MockResponseInterceptor @Inject constructor(
-    @ApplicationContext
-    private val appContext: Context,
+class MockResponseInterceptor private constructor(
+    private val context: Context,
+    private val isMockingEnabled: () -> Boolean = { BuildConfig.DEBUG },
+    fileNameExtractor: ((String) -> String)? = null
 ) : Interceptor {
-    private val mockResponseManager = MockResponseManager()
+    private val mockResponseManager = MockResponseManager(fileNameExtractor)
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val initialRequest = chain.request()
+        val isMockingEnabled = isMockingEnabled()
+        if (isMockingEnabled.not()) {
+            return chain.proceed(initialRequest)
+        }
 
-        val mockAnnotation = initialRequest
+        initialRequest
             .tag(Invocation::class.java)
             ?.method()
-            ?.getAnnotation(Mock::class.java)
+            ?.getAnnotation(Mock::class.java) ?: return chain.proceed(initialRequest)
 
-        val initialResponse = if (
-            EnvironmentManager.isMockingEnabled() && mockAnnotation != null
-        ) {
-            getMockResponse(appContext, initialRequest)
-        } else {
-            chain.proceed(initialRequest)
-        }
-        return initialResponse
+        return getMockResponse(context, initialRequest)
     }
 
     private fun getMockResponse(context: Context, request: Request): Response {
@@ -56,5 +52,20 @@ class MockResponseInterceptor @Inject constructor(
             .message(mockBody.toString())
             .body(mockBody)
             .build()
+    }
+
+    class Builder(private val context: Context) {
+        private var isMockingEnabled: () -> Boolean = { BuildConfig.DEBUG }
+        private var fileNameExtractor: ((String) -> String)? = null
+
+        fun isGlobalMockingEnabled(isMockingEnabled: () -> Boolean) = apply {
+            this.isMockingEnabled = isMockingEnabled
+        }
+
+        fun fileNameExtractor(fileNameExtractor: ((String) -> String)?) = apply {
+            this.fileNameExtractor = fileNameExtractor
+        }
+
+        fun build() = MockResponseInterceptor(context, isMockingEnabled, fileNameExtractor)
     }
 }

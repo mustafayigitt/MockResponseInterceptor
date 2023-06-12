@@ -10,14 +10,15 @@ import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
 
-class MockResponseManager {
-
+class MockResponseManager(
+    private val fileNameExtractor: ((String) -> String)? = null
+) {
     fun getJsonByUrl(context: Context, request: Request): String {
-        val file = (getFileNameFromRequest(request) + "_" + request.method.lowercase()).also {
-            Log.d("MockResponseInterceptor", "Url: ${request.url} --> to $it.json")
-        }
+        val fileName = getFileNameFromRequest(request) + "_" + request.method.lowercase()
+        Log.d("MockResponseInterceptor", "Url: ${request.url} --> to $fileName.json")
+
         return context.assets
-            .open("$file.json")
+            .open("$fileName.json")
             .bufferedReader()
             .use { it.readText() }
     }
@@ -37,16 +38,15 @@ class MockResponseManager {
 
         Log.d("MockResponseInterceptor", "Full Path Found: $path")
 
-        path = convertToJsonFileName(path)
+        path = fileNameExtractor?.invoke(path) ?: convertToJsonFileName(path)
         return path
     }
 
     private fun convertToJsonFileName(path: String): String {
-        return path.replaceFirstChar {
-            if (it == '/') "" else "$it"
-        } // drop '/' character of before the endpoint
-            .replace(Regex("[{}?/]"), "_") // Replace specific characters with '/'
-            .replace(Regex("_{2}"), "_") // Replace specific characters with '/'
+        return path
+            .replaceFirstChar { if (it == '/') "" else "$it" }
+            .replace(Regex("[{}?/]"), "_")
+            .replace(Regex("_{2}"), "_")
             .dropLastWhile { it == '_' }
             .lowercase()
     }

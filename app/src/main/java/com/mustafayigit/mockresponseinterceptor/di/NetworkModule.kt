@@ -39,7 +39,7 @@ object NetworkModule {
     fun provideMockResponseInterceptor(
         @ApplicationContext context: Context
     ): MockResponseInterceptor {
-        return MockResponseInterceptor(context)
+        return MockResponseInterceptor.Builder(context).build()
     }
 
     @Provides
