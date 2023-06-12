@@ -1,4 +1,4 @@
-package com.mustafayigit.mockresponseinterceptor.util
+package com.mustafayigit.mockresponseinterceptor
 
 import android.content.res.AssetManager
 import android.util.Log
@@ -15,8 +15,8 @@ class MockResponseManager(
     private val fileNameExtractor: ((String) -> String)? = null,
 ) {
     fun getJsonByUrl(request: Request): String {
-        val fileName = getFileNameFromRequest(request) + "_" + request.method.lowercase()
-        Log.d("MockResponseInterceptor", "Url: ${request.url} --> to $fileName.json")
+        val fileName = getFileNameFromRequest(request) + "_" + request.method().lowercase()
+        Log.d("MockResponseInterceptor", "Url: ${request.url()} --> to $fileName.json")
 
         return assetManager
             .open("$fileName.json")

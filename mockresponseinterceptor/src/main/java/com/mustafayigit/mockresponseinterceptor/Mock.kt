@@ -1,4 +1,4 @@
-package com.mustafayigit.mockresponseinterceptor.util
+package com.mustafayigit.mockresponseinterceptor
 
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)

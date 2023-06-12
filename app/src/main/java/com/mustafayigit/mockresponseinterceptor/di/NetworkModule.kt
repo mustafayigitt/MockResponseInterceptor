@@ -1,17 +1,15 @@
 package com.mustafayigit.mockresponseinterceptor.di
 
 import android.content.Context
-import com.mustafayigit.mockresponseinterceptor.BuildConfig
 import com.mustafayigit.mockresponseinterceptor.data.INewsRepository
 import com.mustafayigit.mockresponseinterceptor.data.NewsRepository
 import com.mustafayigit.mockresponseinterceptor.data.NewsService
 import com.mustafayigit.mockresponseinterceptor.ui.MainActivity
-import com.mustafayigit.mockresponseinterceptor.util.MockResponseInterceptor
+import com.mustafayigit.mockresponseinterceptor.MockResponseInterceptor
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient

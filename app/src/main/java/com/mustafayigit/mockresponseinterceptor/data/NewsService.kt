@@ -2,7 +2,7 @@ package com.mustafayigit.mockresponseinterceptor.data
 
 import com.mustafayigit.mockresponseinterceptor.BuildConfig
 import com.mustafayigit.mockresponseinterceptor.data.model.NewsWrapperModel
-import com.mustafayigit.mockresponseinterceptor.util.Mock
+import com.mustafayigit.mockresponseinterceptor.Mock
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

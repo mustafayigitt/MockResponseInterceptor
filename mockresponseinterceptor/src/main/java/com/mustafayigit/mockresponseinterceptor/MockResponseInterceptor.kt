@@ -1,23 +1,25 @@
-package com.mustafayigit.mockresponseinterceptor.util
+package com.mustafayigit.mockresponseinterceptor
 
 import android.content.res.AssetManager
 import android.util.Log
-import com.mustafayigit.mockresponseinterceptor.BuildConfig
 import okhttp3.Interceptor
-import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType
 import okhttp3.Protocol
 import okhttp3.Request
 import okhttp3.Response
-import okhttp3.ResponseBody.Companion.toResponseBody
+import okhttp3.ResponseBody
 import retrofit2.Invocation
 import java.io.FileNotFoundException
 
 class MockResponseInterceptor private constructor(
     assetManager: AssetManager,
-    private val isGlobalMockingEnabled: () -> Boolean = { BuildConfig.DEBUG },
+    private val isGlobalMockingEnabled: () -> Boolean = { true },
     fileNameExtractor: ((String) -> String)? = null
 ) : Interceptor {
-    private val mockResponseManager = MockResponseManager(assetManager, fileNameExtractor)
+    private val mockResponseManager = MockResponseManager(
+        assetManager,
+        fileNameExtractor
+    )
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val initialRequest = chain.request()
@@ -40,10 +42,10 @@ class MockResponseInterceptor private constructor(
             mockResponseManager.getJsonByUrl(request)
         }.onFailure {
             if (it is FileNotFoundException && BuildConfig.DEBUG) {
-                error("MockResponseInterceptor: File not found for url: ${request.url}")
+                error("MockResponseInterceptor: File not found for url: ${request.url()}")
             }
         }.getOrThrow()
-        val mockBody = jsonString.toResponseBody("application/json".toMediaType())
+        val mockBody = ResponseBody.create(MediaType.parse("application/json"), jsonString)
 
         return Response.Builder()
             .protocol(Protocol.HTTP_1_1)
