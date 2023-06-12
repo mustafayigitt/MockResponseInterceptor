@@ -1,13 +1,16 @@
 package com.mustafayigit.mockresponseinterceptor.di
 
+import android.content.Context
 import com.mustafayigit.mockresponseinterceptor.BuildConfig
 import com.mustafayigit.mockresponseinterceptor.data.INewsRepository
 import com.mustafayigit.mockresponseinterceptor.data.NewsRepository
 import com.mustafayigit.mockresponseinterceptor.data.NewsService
+import com.mustafayigit.mockresponseinterceptor.util.MockResponseInterceptor
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -33,14 +36,22 @@ object NetworkModule {
     }
 
     @Provides
+    fun provideMockResponseInterceptor(
+        @ApplicationContext context: Context
+    ): MockResponseInterceptor {
+        return MockResponseInterceptor(context)
+    }
+
+    @Provides
     fun provideOkHttpClient(
-        loggingInterceptor: HttpLoggingInterceptor
+        loggingInterceptor: HttpLoggingInterceptor,
+        mockResponseInterceptor: MockResponseInterceptor
     ): OkHttpClient {
         val builder = OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
+            .addInterceptor(mockResponseInterceptor)
         return builder.build()
     }
-
 
     @Provides
     @Singleton
