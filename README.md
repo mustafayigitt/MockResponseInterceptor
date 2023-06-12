@@ -52,7 +52,7 @@ MockResponseInterceptor.Builder(context.assets)
 ```
 
 ## Usage
-### Define your endpoint
+Define your endpoint
 ```kotlin
 @GET("top-headlines")
 @Mock
@@ -62,7 +62,7 @@ suspend fun getNews(
 ): Response<NewsWrapperModel>
 ```
 
-### Create Mock Json File
+Create Mock Json File
 ```json
 {
   "articles": [
