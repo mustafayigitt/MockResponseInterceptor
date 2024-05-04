@@ -21,6 +21,8 @@ With MockResponseInterceptor, fetch data from local json files by retrofit endpo
   - Test your app locally
   - Change global mocking **dynamically**
   - Customize filename extractor
+  - Custom filename
+  - Custom Status code
   
 ## Dependencies
 Add the Jitpack source to project:
@@ -54,12 +56,50 @@ MockResponseInterceptor.Builder(context.assets)
 ## Usage
 Define your endpoint
 ```kotlin
+// Default - no file name, statusCode = 200 - > top-headlines_get_200.json
 @GET("top-headlines")
 @Mock
 suspend fun getNews(
     @Query("language") country: String = "en",
     @Query("apiKey") apiKey: String = BuildConfig.NEWS_API_KEY,
 ): Response<NewsWrapperModel>
+
+
+// With response Code -> top-headlines_get_404.json
+@GET("top-headlines")
+@Mock(responseCode = 404)
+suspend fun getNewsError404(
+    @Query("language") country: String = "en",
+    @Query("apiKey") apiKey: String = BuildConfig.NEWS_API_KEY,
+): Response<NewsWrapperModel>
+
+
+// With response Code -> top-headlines_get_403.json
+@GET("top-headlines")
+@Mock(responseCode = 403)
+suspend fun getNewsError403(
+    @Query("language") country: String = "en",
+    @Query("apiKey") apiKey: String = BuildConfig.NEWS_API_KEY,
+): Response<NewsWrapperModel>
+
+
+// With filename -> test_file.json
+@GET("top-headlines")
+@Mock(fileName = "test_file.json")
+suspend fun getNewsCustomFileName(
+    @Query("language") country: String = "en",
+    @Query("apiKey") apiKey: String = BuildConfig.NEWS_API_KEY,
+): Response<NewsWrapperModel>
+
+
+// With filename -> test_file.json
+@GET("top-headlines")
+@Mock(fileName = "test_file.json", responseCode = 400)
+suspend fun getNewsCustomFileNameResponseCode(
+    @Query("language") country: String = "en",
+    @Query("apiKey") apiKey: String = BuildConfig.NEWS_API_KEY,
+): Response<NewsWrapperModel>
+
 ```
 
 Create Mock Json File
