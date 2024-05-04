@@ -1,0 +1,8 @@
+{
+  "error": {
+    "code": 401,
+    "message": "Unauthorized",
+    "description": "You are not authorized to access this resource.",
+    "suggestion": "Please make sure you are logged in and have the necessary permissions."
+  }
+}

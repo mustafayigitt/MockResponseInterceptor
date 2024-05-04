@@ -28,18 +28,18 @@ class MockResponseInterceptor private constructor(
             return chain.proceed(initialRequest)
         }
 
-        initialRequest
-            .tag(Invocation::class.java)
-            ?.method()
-            ?.getAnnotation(Mock::class.java) ?: return chain.proceed(initialRequest)
-
-        return getMockResponse(initialRequest)
+        val method = initialRequest.tag(Invocation::class.java)?.method()
+        val annotation = method?.getAnnotation(Mock::class.java)
+        if (annotation != null) {
+            return getMockResponse(initialRequest, annotation.fileName, annotation.responseCode)
+        }
+        return chain.proceed(initialRequest)
     }
 
-    private fun getMockResponse(request: Request): Response {
+    private fun getMockResponse(request: Request, fileName: String, responseCode: Int): Response {
         Log.d("MockResponseInterceptor", "Ta daa! MockResponseInterceptor running...")
         val jsonString = kotlin.runCatching {
-            mockResponseManager.getJsonByUrl(request)
+            mockResponseManager.getJsonByUrl(request, fileName, responseCode)
         }.onFailure {
             if (it is FileNotFoundException && BuildConfig.DEBUG) {
                 error("MockResponseInterceptor: File not found for url: ${request.url()}")
@@ -50,7 +50,7 @@ class MockResponseInterceptor private constructor(
         return Response.Builder()
             .protocol(Protocol.HTTP_1_1)
             .request(request)
-            .code(200)
+            .code(responseCode)
             .message(mockBody.toString())
             .body(mockBody)
             .build()

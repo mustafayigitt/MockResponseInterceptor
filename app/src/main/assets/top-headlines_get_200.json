@@ -1,0 +1,8 @@
+{
+  "articles": [
+    {
+      "title": "MockResponseInterceptor - Mock your Retrofit API responses",
+      "urlToImage": "https://picsum.photos/200"
+     }
+  ]
+}
