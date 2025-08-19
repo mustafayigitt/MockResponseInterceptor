@@ -14,12 +14,23 @@ class MockResponseManager(
     private val assetManager: AssetManager,
     private val fileNameExtractor: ((String) -> String)? = null,
 ) {
-    fun getJsonByUrl(request: Request): String {
-        val fileName = getFileNameFromRequest(request) + "_" + request.method().lowercase()
-        Log.d("MockResponseInterceptor", "Url: ${request.url()} --> to $fileName.json")
+    fun getJsonByUrl(request: Request, fileName: String, responseCode: Int): String {
+        var mFilename = fileName
+        if (mFilename.isNotEmpty()) {
+            mFilename.replace(".json", "")
+            Log.d("MockResponseInterceptor", "Url: ${request.url()} --> to $mFilename")
+            return assetManager
+                .open(mFilename)
+                .bufferedReader()
+                .use { it.readText() }
+        } else {
+            mFilename = getFileNameFromRequest(request) + "_" + request.method()
+                .lowercase() + "_" + responseCode
+            Log.d("MockResponseInterceptor", "Url: ${request.url()} --> to $mFilename")
+        }
 
         return assetManager
-            .open("$fileName.json")
+            .open("$mFilename.json")
             .bufferedReader()
             .use { it.readText() }
     }
@@ -40,6 +51,8 @@ class MockResponseManager(
         Log.d("MockResponseInterceptor", "Full Path Found: $path")
 
         path = fileNameExtractor?.invoke(path) ?: convertToJsonFileName(path)
+        Log.d("MockResponseInterceptor", "File Path: $path")
+
         return path
     }
 

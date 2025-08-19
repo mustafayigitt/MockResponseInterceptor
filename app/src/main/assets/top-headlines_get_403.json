@@ -1,0 +1,8 @@
+{
+  "error": {
+    "code": 500,
+    "message": "Internal Server Error",
+    "description": "The server encountered an internal error and was unable to complete your request.",
+    "suggestion": "Please try again later or contact the server administrator."
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "error": {
+    "code": 404,
+    "message": "Not Found",
+    "description": "The requested resource could not be found on the server.",
+    "suggestion": "Please check the URL and try again."
+  }
+}

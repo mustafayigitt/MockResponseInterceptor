@@ -15,9 +15,10 @@ class NewsRepository @Inject constructor(
 ) : INewsRepository {
 
     override suspend fun getNews(): State<List<NewsModel>> {
-        val result = newsService.getNews().asState()
-        val data = (result as? State.Success)?.data?.articles
-            ?: return State.Error(Exception("Error"))
-        return State.Success(data)
+        return when (val result = newsService.getNews().asState()) {
+            is State.Error -> State.Error(Exception(result.exception.message))
+            is State.Loading -> State.Loading
+            is State.Success -> State.Success(result.data.articles)
+        }
     }
 }

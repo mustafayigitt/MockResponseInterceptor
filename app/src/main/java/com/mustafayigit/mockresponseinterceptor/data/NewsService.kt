@@ -19,4 +19,32 @@ interface NewsService {
         @Query("language") country: String = "en",
         @Query("apiKey") apiKey: String = BuildConfig.NEWS_API_KEY,
     ): Response<NewsWrapperModel>
+
+    @GET("top-headlines")
+    @Mock(responseCode = 404)
+    suspend fun getNewsError404(
+        @Query("language") country: String = "en",
+        @Query("apiKey") apiKey: String = BuildConfig.NEWS_API_KEY,
+    ): Response<NewsWrapperModel>
+
+    @GET("top-headlines")
+    @Mock(responseCode = 403)
+    suspend fun getNewsError403(
+        @Query("language") country: String = "en",
+        @Query("apiKey") apiKey: String = BuildConfig.NEWS_API_KEY,
+    ): Response<NewsWrapperModel>
+
+    @GET("top-headlines")
+    @Mock(fileName = "test_file.json")
+    suspend fun getNewsCustomFileName(
+        @Query("language") country: String = "en",
+        @Query("apiKey") apiKey: String = BuildConfig.NEWS_API_KEY,
+    ): Response<NewsWrapperModel>
+
+    @GET("top-headlines")
+    @Mock(fileName = "test_file.json", responseCode = 400)
+    suspend fun getNewsCustomFileNameResponseCode(
+        @Query("language") country: String = "en",
+        @Query("apiKey") apiKey: String = BuildConfig.NEWS_API_KEY,
+    ): Response<NewsWrapperModel>
 }
