@@ -11,8 +11,9 @@ MockResponseInterceptor - Request from Local Jsons without any changes. Dynamic 
 [![License](https://img.shields.io/badge/License-Apache-blue)](#license)
 
 <p align=center>
-<img src="https://www.linkpicture.com/q/Frame-1_17.png">
+  <img width="1280" height="640" alt="image" src="https://github.com/user-attachments/assets/66f87449-7058-409d-9a8b-24d7a8eea0ec" />
 </p>
+
 
 With MockResponseInterceptor, fetch data from local json files by retrofit endpoints without changes.
 
