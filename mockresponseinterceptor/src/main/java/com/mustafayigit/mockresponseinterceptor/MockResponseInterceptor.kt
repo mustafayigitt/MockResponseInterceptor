@@ -4,6 +4,7 @@ import android.content.res.AssetManager
 import android.util.Log
 import okhttp3.Interceptor
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.Protocol
 import okhttp3.Request
 import okhttp3.Response
@@ -42,10 +43,10 @@ class MockResponseInterceptor private constructor(
             mockResponseManager.getJsonByUrl(request, fileName, responseCode)
         }.onFailure {
             if (it is FileNotFoundException && BuildConfig.DEBUG) {
-                error("MockResponseInterceptor: File not found for url: ${request.url()}")
+                error("MockResponseInterceptor: File not found for url: ${request.url}")
             }
         }.getOrThrow()
-        val mockBody = ResponseBody.create(MediaType.parse("application/json"), jsonString)
+        val mockBody = ResponseBody.create("application/json".toMediaTypeOrNull(), jsonString)
 
         return Response.Builder()
             .protocol(Protocol.HTTP_1_1)

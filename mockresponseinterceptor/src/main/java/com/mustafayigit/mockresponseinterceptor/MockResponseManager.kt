@@ -18,15 +18,15 @@ class MockResponseManager(
         var mFilename = fileName
         if (mFilename.isNotEmpty()) {
             mFilename.replace(".json", "")
-            Log.d("MockResponseInterceptor", "Url: ${request.url()} --> to $mFilename")
+            Log.d("MockResponseInterceptor", "Url: ${request.url} --> to $mFilename")
             return assetManager
                 .open(mFilename)
                 .bufferedReader()
                 .use { it.readText() }
         } else {
-            mFilename = getFileNameFromRequest(request) + "_" + request.method()
+            mFilename = getFileNameFromRequest(request) + "_" + request.method
                 .lowercase() + "_" + responseCode
-            Log.d("MockResponseInterceptor", "Url: ${request.url()} --> to $mFilename")
+            Log.d("MockResponseInterceptor", "Url: ${request.url} --> to $mFilename")
         }
 
         return assetManager

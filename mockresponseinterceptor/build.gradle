@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace 'com.mustafayigit.mockresponseinterceptor'
-    compileSdkVersion 33
+    compileSdkVersion 36
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
@@ -17,6 +17,6 @@ android {
 }
 
 dependencies {
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:retrofit:3.0.0'
 
 }
